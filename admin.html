@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Audio Pro</title>
+    <title>Panel de Administración - Audio Pro</title>
     <style>
         * {
             margin: 0;
@@ -12,246 +12,133 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 100%;
-            padding: 40px;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .login-container h1 {
-            text-align: center;
             color: #333;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .error {
-            color: #d32f2f;
-            font-size: 13px;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        /* PANEL ADMIN */
-        .admin-panel {
-            display: none;
-            background: #f5f5f5;
             min-height: 100vh;
             padding: 20px;
         }
 
-        .admin-panel.active {
-            display: block;
-        }
-
-        .admin-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-header h1 {
-            font-size: 28px;
-        }
-
-        .btn-logout {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-logout:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .admin-container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .section-title {
-            font-size: 22px;
-            color: #333;
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
             margin-bottom: 20px;
             font-weight: 600;
+            display: none;
+        }
+
+        .alert-success {
+            background: #4caf50;
+            color: white;
+            display: block;
+        }
+
+        .alert-error {
+            background: #f44336;
+            color: white;
+            display: block;
         }
 
         .form-section {
             background: white;
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            margin-bottom: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .form-section h2 {
             margin-bottom: 20px;
+            color: #667eea;
+            font-size: 22px;
         }
 
-        .form-group-admin {
-            display: flex;
-            flex-direction: column;
+        .form-group {
+            margin-bottom: 15px;
         }
 
-        .form-group-admin label {
-            margin-bottom: 8px;
-            color: #555;
+        label {
+            display: block;
+            margin-bottom: 6px;
             font-weight: 600;
-            font-size: 14px;
+            color: #333;
         }
 
-        .form-group-admin input,
-        .form-group-admin select,
-        .form-group-admin textarea {
+        input, textarea, select {
+            width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
         }
 
-        .form-group-admin input:focus,
-        .form-group-admin select:focus,
-        .form-group-admin textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .form-group-admin textarea {
+        textarea {
             resize: vertical;
             min-height: 80px;
-            grid-column: 1 / -1;
         }
 
-        .image-upload-area {
-            grid-column: 1 / -1;
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
-        .image-upload-area:hover {
-            border-color: #764ba2;
-            background: #f5f5f5;
-        }
-
-        .image-upload-area input[type="file"] {
-            display: none;
-        }
-
-        .image-preview {
-            width: 100%;
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 10px;
-            object-fit: cover;
-        }
-
-        .preview-container {
-            text-align: center;
-        }
-
-        .btn-group {
+        .button-group {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
 
-        .btn-primary,
-        .btn-danger {
+        button {
             padding: 12px 24px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -269,71 +156,81 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .btn-danger {
-            background: #f44336;
-            color: white;
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
         }
 
-        .btn-danger:hover {
-            background: #da190b;
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        .products-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .products-section h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 22px;
         }
 
         .products-table {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        th {
+        .products-table thead {
             background: #f5f5f5;
+        }
+
+        .products-table th {
             padding: 15px;
             text-align: left;
-            color: #555;
             font-weight: 600;
+            color: #333;
             border-bottom: 2px solid #ddd;
         }
 
-        td {
+        .products-table td {
             padding: 15px;
             border-bottom: 1px solid #eee;
         }
 
-        tr:hover {
-            background: #f9f9f9;
-        }
-
-        .product-thumb {
+        .product-image-thumb {
             width: 50px;
             height: 50px;
-            border-radius: 4px;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 6px;
         }
 
-        .btn-edit,
-        .btn-delete {
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit, .btn-delete {
             padding: 8px 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
             font-weight: 600;
+            font-size: 12px;
             transition: all 0.3s ease;
-            margin-right: 5px;
         }
 
         .btn-edit {
-            background: #2196F3;
+            background: #667eea;
             color: white;
         }
 
         .btn-edit:hover {
-            background: #0b7dda;
+            background: #5568d3;
         }
 
         .btn-delete {
@@ -345,17 +242,38 @@
             background: #da190b;
         }
 
-        .success-message {
-            background: #4caf50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
+        .specs-group {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
 
-        .success-message.active {
-            display: block;
+        .specs-group label {
+            margin-bottom: 3px;
+        }
+
+        .specs-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .specs-inputs input {
+            margin-bottom: 8px;
+        }
+
+        .add-spec-btn {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .add-spec-btn:hover {
+            background: #5568d3;
         }
 
         .empty-state {
@@ -364,511 +282,356 @@
             color: #999;
         }
 
-        @media (max-width: 768px) {
-            .admin-header {
-                flex-direction: column;
-                gap: 15px;
-            }
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
 
-            .form-grid {
+        @media (max-width: 768px) {
+            .form-row {
                 grid-template-columns: 1fr;
             }
 
-            table {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .products-table {
                 font-size: 12px;
             }
 
-            th, td {
+            .products-table th, .products-table td {
                 padding: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- LOGIN -->
-    <div class="login-container" id="loginContainer">
-        <h1>🔐 Admin Panel</h1>
-        <form onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label for="username">Usuario</label>
-                <input 
-                    type="text" 
-                    id="username" 
-                    placeholder="admin"
-                    required
-                >
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div>
+                <h1>🎧 Panel de Administración</h1>
             </div>
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    placeholder="admin123"
-                    required
-                >
-            </div>
-            <button class="btn-login" type="submit">Ingresar</button>
-            <div class="error" id="errorMessage"></div>
-        </form>
-    </div>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
 
-    <!-- ADMIN PANEL -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-container">
-            <!-- Header -->
-            <div class="admin-header">
-                <h1>📊 Panel de Administración</h1>
-                <button class="btn-logout" onclick="handleLogout()">Cerrar Sesión</button>
-            </div>
+        <!-- ALERTS -->
+        <div id="alertSuccess" class="alert alert-success"></div>
+        <div id="alertError" class="alert alert-error"></div>
 
-            <!-- Success Message -->
-            <div class="success-message" id="successMessage"></div>
-
-            <!-- Add/Edit Product Form -->
-            <div class="form-section">
-                <h2 class="section-title">➕ Agregar / Editar Producto</h2>
-                <form onsubmit="handleSaveProduct(event)">
-                    <div class="form-grid">
-                        <div class="form-group-admin">
-                            <label for="productName">Nombre del Producto</label>
-                            <input 
-                                type="text" 
-                                id="productName" 
-                                placeholder="Ej: Sony WH-1000XM4"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-group-admin">
-                            <label for="productBrand">Marca</label>
-                            <select id="productBrand" required>
-                                <option value="">Selecciona una marca</option>
-                                <option value="Sony">Sony</option>
-                                <option value="JBL">JBL</option>
-                                <option value="Anker">Anker</option>
-                                <option value="Sennheiser">Sennheiser</option>
-                                <option value="Beats">Beats</option>
-                                <option value="Xiaomi">Xiaomi</option>
-                                <option value="Realme">Realme</option>
-                                <option value="Amazon">Amazon</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group-admin">
-                            <label for="productPrice">Precio ($)</label>
-                            <input 
-                                type="number" 
-                                id="productPrice" 
-                                placeholder="99"
-                                min="0"
-                                step="0.01"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-group-admin">
-                            <label for="productType">Tipo de Producto</label>
-                            <select id="productType" onchange="updateSpecFields()" required>
-                                <option value="">Selecciona tipo</option>
-                                <option value="auricular">Auriculares</option>
-                                <option value="altavoz">Altavoz</option>
-                                <option value="libro">Libro / E-reader</option>
-                                <option value="powerbank">Power Bank</option>
-                                <option value="otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group-admin image-upload-area" onclick="document.getElementById('productImage').click()">
-                            <input 
-                                type="file" 
-                                id="productImage" 
-                                accept="image/*"
-                                onchange="handleImageUpload(event)"
-                                required
-                            >
-                            <div id="imageUploadText">
-                                📸 Haz clic o arrastra una imagen aquí<br>
-                                <small>PNG, JPG, WebP (máx 5MB)</small>
-                            </div>
-                            <div id="previewContainer" class="preview-container" style="display: none;">
-                                <img id="imagePreview" class="image-preview" alt="Preview">
-                                <button type="button" onclick="clearImage()" style="margin-top: 10px; padding: 5px 10px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">Cambiar imagen</button>
-                            </div>
-                        </div>
-
-                        <div class="form-group-admin">
-                            <label for="productDescription">Descripción</label>
-                            <textarea 
-                                id="productDescription" 
-                                placeholder="Describe los detalles del producto..."
-                                required
-                            ></textarea>
-                        </div>
-
-                        <!-- ESPECIFICACIONES DINÁMICAS -->
-                        <div id="specsContainer"></div>
-                    </div>
-
-                    <div class="btn-group">
-                        <button class="btn-primary" type="submit" id="submitBtn">Guardar Producto</button>
-                        <button class="btn-danger" type="button" onclick="resetForm()">Limpiar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Products List -->
-            <div class="form-section">
-                <h2 class="section-title">📦 Productos Actuales</h2>
-                <div class="products-table">
-                    <table id="productsTable">
-                        <thead>
-                            <tr>
-                                <th>Foto</th>
-                                <th>Nombre</th>
-                                <th>Marca</th>
-                                <th>Precio</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsTableBody">
-                        </tbody>
-                    </table>
+        <!-- FORM SECTION -->
+        <div class="form-section">
+            <h2>Agregar/Editar Producto</h2>
+            <form id="productForm" onsubmit="handleSubmit(event)">
+                <input type="hidden" id="productId">
+                
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto *</label>
+                    <input type="text" id="productName" required>
                 </div>
-            </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productBrand">Marca *</label>
+                        <input type="text" id="productBrand" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productType">Tipo *</label>
+                        <select id="productType" required>
+                            <option value="">Selecciona tipo</option>
+                            <option value="auricular">Auricular</option>
+                            <option value="altavoz">Altavoz</option>
+                            <option value="power-bank">Power Bank</option>
+                            <option value="e-reader">E-Reader</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Precio *</label>
+                        <input type="number" id="productPrice" required step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage">Imagen (URL o Base64)</label>
+                        <input type="text" id="productImage" placeholder="Pega aquí la imagen o URL">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Descripción *</label>
+                    <textarea id="productDescription" required></textarea>
+                </div>
+
+                <div class="specs-group">
+                    <label>Especificaciones (Opcional)</label>
+                    <div id="specsContainer"></div>
+                    <button type="button" class="add-spec-btn" onclick="addSpecInput()">+ Agregar Especificación</button>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">💾 Guardar Producto</button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">🔄 Limpiar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- PRODUCTS LIST SECTION -->
+        <div class="products-section">
+            <h2>📦 Productos Actuales</h2>
+            <div id="productsList"></div>
         </div>
     </div>
 
     <script>
-        // ========== CREDENCIALES ==========
+        let products = [];
         const ADMIN_USER = 'admin';
         const ADMIN_PASS = 'admin123';
 
-        let currentProducts = [];
-        let editingProductId = null;
-        let currentImageBase64 = null;
+        // CHECK LOGIN
+        window.addEventListener('load', function() {
+            checkLogin();
+            loadProducts();
+        });
 
-        // ========== LOGIN ==========
-        function handleLogin(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username === ADMIN_USER && password === ADMIN_PASS) {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').classList.add('active');
-                loadProducts();
-                sessionStorage.setItem('adminLoggedIn', 'true');
-            } else {
-                document.getElementById('errorMessage').textContent = '❌ Usuario o contraseña incorrectos';
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            if (!isLoggedIn) {
+                const user = prompt('Usuario:');
+                const pass = prompt('Contraseña:');
+                
+                if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                    localStorage.setItem('adminLoggedIn', 'true');
+                } else {
+                    alert('Credenciales incorrectas');
+                    window.location.href = './index.html';
+                }
             }
         }
 
-        function handleLogout() {
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('adminPanel').classList.remove('active');
-            sessionStorage.removeItem('adminLoggedIn');
-            resetForm();
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = './index.html';
         }
 
-        // ========== MANEJO DE IMAGEN ==========
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (file.size > maxSize) {
-                alert('La imagen es muy grande. Máximo 5MB');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                currentImageBase64 = event.target.result;
-                displayImagePreview();
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function displayImagePreview() {
-            document.getElementById('imageUploadText').style.display = 'none';
-            document.getElementById('previewContainer').style.display = 'block';
-            document.getElementById('imagePreview').src = currentImageBase64;
-        }
-
-        function clearImage() {
-            currentImageBase64 = null;
-            document.getElementById('productImage').value = '';
-            document.getElementById('imageUploadText').style.display = 'block';
-            document.getElementById('previewContainer').style.display = 'none';
-        }
-
-        // ========== CARGAR PRODUCTOS ==========
+        // CARGAR PRODUCTOS - MODIFICADO PARA GITHUB PAGES
         async function loadProducts() {
             try {
                 const response = await fetch('./productos.json');
-                currentProducts = await response.json();
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el archivo');
+                }
+                products = await response.json();
+                if (!Array.isArray(products)) {
+                    products = [products];
+                }
                 displayProducts();
             } catch (error) {
-                console.error('Error cargando productos:', error);
-                showSuccess('❌ Error al cargar productos', true);
+                console.error('Error:', error);
+                showAlert('Error al cargar productos', 'error');
             }
         }
 
-        // ========== MOSTRAR PRODUCTOS EN TABLA ==========
+        // MOSTRAR PRODUCTOS
         function displayProducts() {
-            const tbody = document.getElementById('productsTableBody');
+            const list = document.getElementById('productsList');
             
-            if (currentProducts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No hay productos aún</td></tr>';
+            if (!products || products.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No hay productos registrados</p>
+                    </div>
+                `;
                 return;
             }
 
-            tbody.innerHTML = currentProducts.map(product => `
-                <tr>
-                    <td>
-                        ${product.image ? `<img src="${product.image}" class="product-thumb" alt="${product.name}">` : '📦'}
-                    </td>
-                    <td>${product.name}</td>
-                    <td>${product.brand}</td>
-                    <td>$${product.price}</td>
-                    <td>
-                        <button class="btn-edit" onclick="editProduct(${product.id})">Editar</button>
-                        <button class="btn-delete" onclick="deleteProduct(${product.id})">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
+            let html = `
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th>Marca</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            products.forEach(product => {
+                html += `
+                    <tr>
+                        <td>
+                            ${product.image ? `<img src="${product.image}" class="product-image-thumb" alt="${product.name}">` : '📦'}
+                        </td>
+                        <td>${product.name}</td>
+                        <td>${product.brand}</td>
+                        <td>$${product.price}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-edit" onclick="editProduct(${product.id})">✏️ Editar</button>
+                                <button class="btn-delete" onclick="deleteProduct(${product.id})">🗑️ Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            list.innerHTML = html;
         }
 
-        // ========== GUARDAR PRODUCTO ==========
-        async function handleSaveProduct(e) {
+        // AGREGAR ESPECIFICACIÓN
+        function addSpecInput() {
+            const container = document.getElementById('specsContainer');
+            const specDiv = document.createElement('div');
+            specDiv.className = 'specs-inputs';
+            specDiv.innerHTML = `
+                <input type="text" placeholder="Nombre (ej: Conexión)" class="spec-name">
+                <input type="text" placeholder="Valor (ej: Bluetooth 5.0)" class="spec-value">
+            `;
+            container.appendChild(specDiv);
+        }
+
+        // OBTENER ESPECIFICACIONES
+        function getSpecsFromForm() {
+            const specs = {};
+            const specInputs = document.querySelectorAll('.specs-inputs');
+            specInputs.forEach(input => {
+                const name = input.querySelector('.spec-name').value;
+                const value = input.querySelector('.spec-value').value;
+                if (name && value) {
+                    specs[name] = value;
+                }
+            });
+            return specs;
+        }
+
+        // SUBMIT FORM
+        function handleSubmit(e) {
             e.preventDefault();
 
-            if (!editingProductId && !currentImageBase64) {
-                alert('Por favor, carga una imagen para el producto');
-                return;
-            }
-
-            const productData = {
+            const id = document.getElementById('productId').value;
+            const newProduct = {
+                id: id ? parseInt(id) : Date.now(),
                 name: document.getElementById('productName').value,
                 brand: document.getElementById('productBrand').value,
                 type: document.getElementById('productType').value,
                 price: parseFloat(document.getElementById('productPrice').value),
-                image: currentImageBase64,
+                image: document.getElementById('productImage').value,
                 description: document.getElementById('productDescription').value,
-                specs: getSpecsFromForm(),
-                originalPrice: null,
-                discount: null
+                specs: getSpecsFromForm()
             };
 
-            try {
-                let response;
-                if (editingProductId) {
-                    response = await fetch(`/api/productos/${editingProductId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(productData)
-                    });
-                    showSuccess('✓ Producto actualizado correctamente');
-                } else {
-                    response = await fetch('/api/productos', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(productData)
-                    });
-                    showSuccess('✓ Producto agregado correctamente');
-                }
-
-                if (response.ok) {
-                    resetForm();
-                    loadProducts();
-                } else {
-                    showSuccess('❌ Error al guardar producto', true);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showSuccess('❌ Error al guardar producto', true);
+            if (id) {
+                const index = products.findIndex(p => p.id === parseInt(id));
+                products[index] = newProduct;
+                showAlert('✓ Producto actualizado correctamente', 'success');
+            } else {
+                products.push(newProduct);
+                showAlert('✓ Producto agregado correctamente', 'success');
             }
+
+            saveProducts();
+            resetForm();
+            displayProducts();
         }
 
-        // ========== EDITAR PRODUCTO ==========
+        // EDITAR PRODUCTO
         function editProduct(id) {
-            const product = currentProducts.find(p => p.id === id);
+            const product = products.find(p => p.id === id);
             if (!product) return;
 
-            editingProductId = id;
+            document.getElementById('productId').value = id;
             document.getElementById('productName').value = product.name;
             document.getElementById('productBrand').value = product.brand;
-            document.getElementById('productType').value = product.type || '';
+            document.getElementById('productType').value = product.type;
             document.getElementById('productPrice').value = product.price;
+            document.getElementById('productImage').value = product.image || '';
             document.getElementById('productDescription').value = product.description;
-            
-            currentImageBase64 = product.image;
-            if (currentImageBase64) {
-                displayImagePreview();
-            }
-            
-            updateSpecFields();
+
+            // Cargar specs
+            const container = document.getElementById('specsContainer');
+            container.innerHTML = '';
             if (product.specs) {
-                fillSpecsInForm(product.specs);
+                Object.entries(product.specs).forEach(([key, value]) => {
+                    const specDiv = document.createElement('div');
+                    specDiv.className = 'specs-inputs';
+                    specDiv.innerHTML = `
+                        <input type="text" class="spec-name" value="${key}">
+                        <input type="text" class="spec-value" value="${value}">
+                    `;
+                    container.appendChild(specDiv);
+                });
             }
-            
-            document.getElementById('submitBtn').textContent = 'Actualizar Producto';
 
             window.scrollTo(0, 0);
         }
 
-        // ========== ELIMINAR PRODUCTO ==========
-        async function deleteProduct(id) {
-            if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) return;
+        // ELIMINAR PRODUCTO
+        function deleteProduct(id) {
+            if (confirm('¿Eliminar este producto?')) {
+                products = products.filter(p => p.id !== id);
+                saveProducts();
+                displayProducts();
+                showAlert('✓ Producto eliminado', 'success');
+            }
+        }
 
+        // GUARDAR PRODUCTOS - SIN SERVIDOR
+        function saveProducts() {
             try {
-                const response = await fetch(`/api/productos/${id}`, {
-                    method: 'DELETE'
+                // Guardar en localStorage
+                localStorage.setItem('productsBackup', JSON.stringify(products));
+                
+                // Mostrar mensaje de éxito
+                showAlert('✓ Producto guardado localmente. Copia manualmente a GitHub.', 'success');
+                
+                // Log en consola
+                console.log('Productos guardados:', products);
+                console.log('JSON para copiar a productos.json:');
+                console.log(JSON.stringify(products, null, 2));
+                
+                // Copiar al portapapeles automáticamente
+                const jsonString = JSON.stringify(products, null, 2);
+                navigator.clipboard.writeText(jsonString).then(() => {
+                    console.log('✓ JSON copiado al portapapeles');
+                }).catch(err => {
+                    console.log('No se pudo copiar. Copia manualmente desde consola:', jsonString);
                 });
-
-                if (response.ok) {
-                    showSuccess('✓ Producto eliminado correctamente');
-                    loadProducts();
-                } else {
-                    showSuccess('❌ Error al eliminar producto', true);
-                }
+                
             } catch (error) {
-                console.error('Error:', error);
-                showSuccess('❌ Error al eliminar producto', true);
+                console.error('Error guardando:', error);
+                showAlert('❌ Error al guardar producto', 'error');
             }
         }
 
-        // ========== ESPECIFICACIONES POR TIPO ==========
-        const specsByType = {
-            auricular: [
-                { key: 'tipo', label: 'Tipo', type: 'text', placeholder: 'Over-Ear, In-Ear, TWS' },
-                { key: 'conexion', label: 'Conexión', type: 'text', placeholder: 'Bluetooth 5.0, 3.5mm' },
-                { key: 'bateria', label: 'Batería', type: 'text', placeholder: '30 horas' },
-                { key: 'cancelacion', label: 'Cancelación', type: 'text', placeholder: 'Activa, Pasiva, No' },
-                { key: 'peso', label: 'Peso', type: 'text', placeholder: '250g' },
-                { key: 'frecuencia', label: 'Rango Frecuencia', type: 'text', placeholder: '20Hz - 20kHz' }
-            ],
-            altavoz: [
-                { key: 'tipo', label: 'Tipo', type: 'text', placeholder: 'Portátil, Sobremesa' },
-                { key: 'potencia', label: 'Potencia', type: 'text', placeholder: '20W, 30W' },
-                { key: 'conexion', label: 'Conexión', type: 'text', placeholder: 'Bluetooth, 3.5mm' },
-                { key: 'bateria', label: 'Batería', type: 'text', placeholder: '12 horas' },
-                { key: 'impermeabilidad', label: 'Impermeabilidad', type: 'text', placeholder: 'IPX4, IPX7' },
-                { key: 'peso', label: 'Peso', type: 'text', placeholder: '500g' }
-            ],
-            libro: [
-                { key: 'pantalla', label: 'Pantalla', type: 'text', placeholder: '6.8 pulgadas' },
-                { key: 'resolucion', label: 'Resolución', type: 'text', placeholder: '300 ppi' },
-                { key: 'almacenamiento', label: 'Almacenamiento', type: 'text', placeholder: '16GB' },
-                { key: 'bateria', label: 'Batería', type: 'text', placeholder: 'Hasta 10 semanas' },
-                { key: 'resistencia', label: 'Resistencia', type: 'text', placeholder: 'IPX8' },
-                { key: 'luz', label: 'Luz ajustable', type: 'text', placeholder: 'Sí, No' }
-            ],
-            powerbank: [
-                { key: 'capacidad', label: 'Capacidad', type: 'text', placeholder: '10000mAh' },
-                { key: 'potencia', label: 'Potencia', type: 'text', placeholder: '22.5W' },
-                { key: 'puertos', label: 'Puertos', type: 'text', placeholder: '2x USB, USB-C' },
-                { key: 'pantalla', label: 'Pantalla', type: 'text', placeholder: 'Digital, LED' },
-                { key: 'peso', label: 'Peso', type: 'text', placeholder: '220g' },
-                { key: 'diseño', label: 'Diseño', type: 'text', placeholder: 'Compacto' }
-            ],
-            otro: [
-                { key: 'especificacion1', label: 'Especificación 1', type: 'text', placeholder: '' },
-                { key: 'especificacion2', label: 'Especificación 2', type: 'text', placeholder: '' },
-                { key: 'especificacion3', label: 'Especificación 3', type: 'text', placeholder: '' }
-            ]
-        };
-
-        // ========== ACTUALIZAR CAMPOS DE SPECS ==========
-        function updateSpecFields() {
-            const type = document.getElementById('productType').value;
-            const container = document.getElementById('specsContainer');
-            
-            if (!type) {
-                container.innerHTML = '';
-                return;
-            }
-
-            const specs = specsByType[type] || [];
-            let html = '<h3 style="margin-top: 20px; margin-bottom: 15px; color: #333;">Especificaciones</h3>';
-            
-            specs.forEach(spec => {
-                html += `
-                    <div class="form-group-admin">
-                        <label for="spec_${spec.key}">${spec.label}</label>
-                        <input 
-                            type="${spec.type}" 
-                            id="spec_${spec.key}" 
-                            class="spec-input"
-                            data-key="${spec.key}"
-                            placeholder="${spec.placeholder}"
-                        >
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        // ========== OBTENER SPECS DEL FORMULARIO ==========
-        function getSpecsFromForm() {
-            const specInputs = document.querySelectorAll('.spec-input');
-            const specs = {};
-            
-            specInputs.forEach(input => {
-                if (input.value.trim()) {
-                    specs[input.dataset.key] = input.value;
-                }
-            });
-            
-            return specs;
-        }
-
-        // ========== RELLENAR SPECS AL EDITAR ==========
-        function fillSpecsInForm(specs) {
-            Object.keys(specs).forEach(key => {
-                const input = document.getElementById(`spec_${key}`);
-                if (input) {
-                    input.value = specs[key];
-                }
-            });
-        }
-
-        // ========== LIMPIAR FORMULARIO ==========
+        // RESETEAR FORM
         function resetForm() {
-            document.getElementById('productName').value = '';
-            document.getElementById('productBrand').value = '';
-            document.getElementById('productType').value = '';
-            document.getElementById('productPrice').value = '';
-            document.getElementById('productDescription').value = '';
-            document.getElementById('submitBtn').textContent = 'Guardar Producto';
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
             document.getElementById('specsContainer').innerHTML = '';
-            clearImage();
-            editingProductId = null;
         }
 
-        // ========== MENSAJE DE ÉXITO ==========
-        function showSuccess(message, isError = false) {
-            const successMsg = document.getElementById('successMessage');
-            successMsg.textContent = message;
-            successMsg.classList.add('active');
-            
-            if (!isError) {
-                setTimeout(() => {
-                    successMsg.classList.remove('active');
-                }, 3000);
-            }
+        // MOSTRAR ALERTA
+        function showAlert(message, type) {
+            const alert = document.getElementById(`alert${type.charAt(0).toUpperCase() + type.slice(1)}`);
+            alert.textContent = message;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 4000);
         }
-
-        // ========== VERIFICAR SESIÓN ==========
-        window.addEventListener('load', () => {
-            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').classList.add('active');
-                loadProducts();
-            }
-        });
     </script>
 </body>
 </html>
