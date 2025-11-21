@@ -287,6 +287,18 @@
             margin-bottom: 10px;
         }
 
+        .image-preview-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .image-preview-container img {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -356,10 +368,12 @@
                         <label for="productPrice">Precio *</label>
                         <input type="number" id="productPrice" required step="0.01">
                     </div>
-                    <div class="form-group">
-                        <label for="productImage">Imagen (URL o Base64)</label>
-                        <input type="text" id="productImage" placeholder="Pega aquí la imagen o URL">
-                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">📸 Imagen del Producto</label>
+                    <input type="file" id="productImage" accept="image/*" onchange="convertImageToBase64(event)">
+                    <div class="image-preview-container" id="imagePreview"></div>
                 </div>
 
                 <div class="form-group">
@@ -389,6 +403,7 @@
 
     <script>
         let products = [];
+        let productImageBase64 = '';
         const ADMIN_USER = 'admin';
         const ADMIN_PASS = 'admin123';
 
@@ -418,7 +433,28 @@
             window.location.href = './index.html';
         }
 
-        // CARGAR PRODUCTOS - MODIFICADO PARA GITHUB PAGES
+        // CONVERTIR IMAGEN A BASE64
+        function convertImageToBase64(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                productImageBase64 = base64String;
+                
+                // Mostrar preview
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${base64String}" alt="Preview">`;
+                
+                console.log('✓ Imagen convertida a Base64');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // CARGAR PRODUCTOS
         async function loadProducts() {
             try {
                 const response = await fetch('./productos.json');
@@ -528,7 +564,7 @@
                 brand: document.getElementById('productBrand').value,
                 type: document.getElementById('productType').value,
                 price: parseFloat(document.getElementById('productPrice').value),
-                image: document.getElementById('productImage').value,
+                image: productImageBase64,
                 description: document.getElementById('productDescription').value,
                 specs: getSpecsFromForm()
             };
@@ -557,8 +593,14 @@
             document.getElementById('productBrand').value = product.brand;
             document.getElementById('productType').value = product.type;
             document.getElementById('productPrice').value = product.price;
-            document.getElementById('productImage').value = product.image || '';
             document.getElementById('productDescription').value = product.description;
+
+            // Mostrar imagen
+            if (product.image) {
+                productImageBase64 = product.image;
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${product.image}" alt="Preview">`;
+            }
 
             // Cargar specs
             const container = document.getElementById('specsContainer');
@@ -588,26 +630,21 @@
             }
         }
 
-        // GUARDAR PRODUCTOS - SIN SERVIDOR
+        // GUARDAR PRODUCTOS
         function saveProducts() {
             try {
-                // Guardar en localStorage
                 localStorage.setItem('productsBackup', JSON.stringify(products));
+                showAlert('✓ Producto guardado. JSON copiado al portapapeles.', 'success');
                 
-                // Mostrar mensaje de éxito
-                showAlert('✓ Producto guardado localmente. Copia manualmente a GitHub.', 'success');
-                
-                // Log en consola
                 console.log('Productos guardados:', products);
                 console.log('JSON para copiar a productos.json:');
                 console.log(JSON.stringify(products, null, 2));
                 
-                // Copiar al portapapeles automáticamente
                 const jsonString = JSON.stringify(products, null, 2);
                 navigator.clipboard.writeText(jsonString).then(() => {
                     console.log('✓ JSON copiado al portapapeles');
                 }).catch(err => {
-                    console.log('No se pudo copiar. Copia manualmente desde consola:', jsonString);
+                    console.log('No se pudo copiar. Copia manualmente desde consola.');
                 });
                 
             } catch (error) {
@@ -621,6 +658,8 @@
             document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
             document.getElementById('specsContainer').innerHTML = '';
+            document.getElementById('imagePreview').innerHTML = '';
+            productImageBase64 = '';
         }
 
         // MOSTRAR ALERTA
