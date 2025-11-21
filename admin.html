@@ -606,7 +606,7 @@
         // ========== CARGAR PRODUCTOS ==========
         async function loadProducts() {
             try {
-                const response = await fetch('/api/productos');
+                const response = await fetch('./productos.json');
                 currentProducts = await response.json();
                 displayProducts();
             } catch (error) {
