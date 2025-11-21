@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redimensionador de Imágenes - Audio Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f9f9f9;
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .preview-section {
+            display: none;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .preview-section.active {
+            display: block;
+        }
+
+        .preview-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-reset {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-reset:hover {
+            background: #efefef;
+        }
+
+        .info {
+            background: #f0f8ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+
+        .size-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .size-info div {
+            margin: 5px 0;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📐 Redimensionador 500x500</h1>
+
+        <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+            <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(event)">
+            <div class="upload-text">📸 Clic aquí o arrastra tu imagen</div>
+            <div class="upload-subtext">Cualquier tamaño - Saldrá 500x500</div>
+        </div>
+
+        <div class="preview-section" id="previewSection">
+            <div class="preview-title">Vista Previa (500x500 px)</div>
+            <canvas id="canvas"></canvas>
+
+            <div class="size-info">
+                <div><span class="label">Tamaño final:</span> 500 × 500 px</div>
+                <div><span class="label">Formato:</span> JPG (máxima compresión)</div>
+                <div id="fileSizeInfo"><span class="label">Tamaño archivo:</span> Calculando...</div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-download" onclick="downloadImage()">⬇️ Descargar JPG</button>
+                <button class="btn-reset" onclick="resetForm()">🔄 Otra Imagen</button>
+            </div>
+        </div>
+
+        <div class="info">
+            <strong>ℹ️ Instrucciones:</strong>
+            1. Sube tu imagen (cualquier tamaño)<br>
+            2. Se redimensionará automáticamente a 500x500<br>
+            3. Descarga y usa en el admin panel<br>
+            4. ¡Se verá perfecta en tu tienda!
+        </div>
+    </div>
+
+    <script>
+        let originalImage = null;
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImage = img;
+                    resizeAndDisplayImage();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resizeAndDisplayImage() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Forzar 500x500
+            canvas.width = 500;
+            canvas.height = 500;
+
+            // Llenar fondo blanco
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 500, 500);
+
+            // Calcular proporciones
+            const imgWidth = originalImage.width;
+            const imgHeight = originalImage.height;
+            const ratio = Math.min(500 / imgWidth, 500 / imgHeight);
+
+            const width = imgWidth * ratio;
+            const height = imgHeight * ratio;
+            const x = (500 - width) / 2;
+            const y = (500 - height) / 2;
+
+            // Dibujar imagen centrada
+            ctx.drawImage(originalImage, x, y, width, height);
+
+            // Mostrar info de tamaño
+            canvas.toBlob(blob => {
+                const sizeKB = (blob.size / 1024).toFixed(2);
+                document.getElementById('fileSizeInfo').innerHTML = 
+                    `<span class="label">Tamaño archivo:</span> ${sizeKB} KB`;
+            }, 'image/jpeg', 0.95);
+
+            document.getElementById('previewSection').classList.add('active');
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.download = `producto-500x500-${Date.now()}.jpg`;
+            link.click();
+        }
+
+        function resetForm() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('previewSection').classList.remove('active');
+            originalImage = null;
+        }
+
+        // Drag & Drop
+        const uploadArea = document.querySelector('.upload-area');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#764ba2';
+            uploadArea.style.background = '#f5f5f5';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#667eea';
+            uploadArea.style.background = 'transparent';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                document.getElementById('imageInput').files = e.dataTransfer.files;
+                handleImageUpload({target: {files: [file]}});
+            }
+            uploadArea.style.borderColor = '#667eea';
+            uploadArea.style.background = 'transparent';
+        });
+    </script>
+</body>
+</html>
